@@ -427,6 +427,7 @@ GameObject:
   - component: {fileID: 682996419}
   - component: {fileID: 682996418}
   - component: {fileID: 682996417}
+  - component: {fileID: 682996420}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -523,6 +524,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &682996420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682996416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c9b745ebe303b543b90efda9edfe4c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ServerManager
+  _pointPrefab: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,7 +657,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5091264501789634759, guid: 07af8916f1d1f7a43bd98a2d9e75dd58, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 20.61
+      value: 31.57
       objectReference: {fileID: 0}
     - target: {fileID: 5091264501789634759, guid: 07af8916f1d1f7a43bd98a2d9e75dd58, type: 3}
       propertyPath: m_LocalPosition.y
