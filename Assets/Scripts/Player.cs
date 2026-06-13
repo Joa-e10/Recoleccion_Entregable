@@ -11,6 +11,13 @@ public class Player : NetworkBehaviour
     private CharacterController _characterController;
     [SerializeField]private PlayerInput _playerInput;
    [SerializeField]private GameObject _cam;
+    private Point _currentPoint;
+    private Point _gatheredPoint;
+    private int _quantityPress;
+    private bool _itemInRange;
+    private NetworkVariable<int> _score = new NetworkVariable<int>(0);
+
+    //CAMARA Y MOVIMIENTO DEL CHARACTER CONTROLLER
     private Vector2 _input;
     private float _speed = 5f;
     private float _yVelocity;
@@ -37,6 +44,8 @@ public class Player : NetworkBehaviour
         RotateCharacter(moveDirection);
         moveDirection = ApplyGravity(moveDirection);
         MoveCharacter(moveDirection);
+
+        Debug.Log("El contador esta en: "+_quantityPress);
     }
 
     private Vector3 GetCameraRelativeDirection()
@@ -84,5 +93,51 @@ public class Player : NetworkBehaviour
     public void OnMove(InputValue value)
     {
         _input = value.Get<Vector2>();
+    }
+
+    private void OnPickUp(InputValue value) 
+    {
+        if (value.isPressed && _itemInRange)
+        {
+            
+                _currentPoint.SetIsCollected(true);
+                _gatheredPoint = _currentPoint;
+                Debug.Log("Esta en rango y lo recolecto");
+        }
+        if (value.isPressed && _quantityPress >= 2) 
+        {
+            if (_gatheredPoint != null) 
+            {
+                _gatheredPoint.SetIsReleased(transform.position);
+                _gatheredPoint.SetIsCollected(false);
+                _gatheredPoint.Released();
+            }
+            _quantityPress = 0;
+        }
+        _quantityPress++;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Point _point = other.GetComponent<Point>();
+
+        if (_point != null) 
+        {
+            _currentPoint = _point;
+            _itemInRange = true;
+        }
+
+
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        Point _point = other.GetComponent<Point>();
+
+        if (_point != null)
+        {
+            _currentPoint = null;
+            _itemInRange = false;
+        }
     }
 }
