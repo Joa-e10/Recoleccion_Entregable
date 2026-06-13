@@ -15,6 +15,7 @@ public class Player : NetworkBehaviour
     private Point _gatheredPoint;
     private int _quantityPress;
     private bool _itemInRange;
+    private bool _collectionPoint;
     private NetworkVariable<int> _score = new NetworkVariable<int>(0);
 
     //CAMARA Y MOVIMIENTO DEL CHARACTER CONTROLLER
@@ -99,22 +100,29 @@ public class Player : NetworkBehaviour
     {
         if (value.isPressed && _itemInRange)
         {
-            
-                _currentPoint.SetIsCollected(true);
-                _gatheredPoint = _currentPoint;
-                Debug.Log("Esta en rango y lo recolecto");
+            _quantityPress++;
+            _collectionPoint = true;
+            _currentPoint.SetIsCollected(_collectionPoint);
+            _gatheredPoint = _currentPoint;
+             Debug.Log("Esta en rango y lo recolecto");
         }
-        if (value.isPressed && _quantityPress >= 2) 
+        if (_quantityPress == 1 && _collectionPoint == true)
         {
-            if (_gatheredPoint != null) 
+            if (_gatheredPoint != null)
             {
+                _collectionPoint = false;
                 _gatheredPoint.SetIsReleased(transform.position);
-                _gatheredPoint.SetIsCollected(false);
+                _gatheredPoint.SetIsCollected(_collectionPoint);
                 _gatheredPoint.Released();
+                _gatheredPoint = null;
+
             }
+        }
+        else 
+        {
             _quantityPress = 0;
         }
-        _quantityPress++;
+            _quantityPress++;
     }
 
     private void OnTriggerEnter(Collider other)
