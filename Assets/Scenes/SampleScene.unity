@@ -574,30 +574,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Goal
       objectReference: {fileID: 0}
-    - target: {fileID: 7660008077634971408, guid: 206c42b6e149e4f40af95b2cc8751761, type: 3}
-      propertyPath: m_Size.x
-      value: 5.651493
-      objectReference: {fileID: 0}
-    - target: {fileID: 7660008077634971408, guid: 206c42b6e149e4f40af95b2cc8751761, type: 3}
-      propertyPath: m_Size.y
-      value: 0.6389585
-      objectReference: {fileID: 0}
-    - target: {fileID: 7660008077634971408, guid: 206c42b6e149e4f40af95b2cc8751761, type: 3}
-      propertyPath: m_Size.z
-      value: 5.3497868
-      objectReference: {fileID: 0}
-    - target: {fileID: 7660008077634971408, guid: 206c42b6e149e4f40af95b2cc8751761, type: 3}
-      propertyPath: m_Center.x
-      value: 0.20745659
-      objectReference: {fileID: 0}
-    - target: {fileID: 7660008077634971408, guid: 206c42b6e149e4f40af95b2cc8751761, type: 3}
-      propertyPath: m_Center.y
-      value: -0.18447852
-      objectReference: {fileID: 0}
-    - target: {fileID: 7660008077634971408, guid: 206c42b6e149e4f40af95b2cc8751761, type: 3}
-      propertyPath: m_Center.z
-      value: -0.027142525
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

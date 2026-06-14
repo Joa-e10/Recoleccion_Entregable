@@ -7,6 +7,7 @@ public class Point : NetworkBehaviour
     private MeshRenderer _meshRenderer;
     private Transform _transformPoint;
     private Vector3 _newPosition;
+    private int _pointValue = 1;
     void Start()
     {
         
@@ -16,6 +17,7 @@ public class Point : NetworkBehaviour
     {
        _meshRenderer = GetComponent<MeshRenderer>();
         _transformPoint = GetComponent<Transform>();
+        
     }
     public void SetIsCollected(bool state) 
     {
@@ -24,6 +26,11 @@ public class Point : NetworkBehaviour
     public void SetIsReleased(Vector3 newPosition)
     {
         _newPosition = newPosition;
+    }
+
+    public int GetPointValue() 
+    {
+        return _pointValue;
     }
 
     public void Collected() 
@@ -38,6 +45,11 @@ public class Point : NetworkBehaviour
         }
     }
 
+    public void PointDespawn() 
+    {
+        GetComponent<NetworkObject>().Despawn(true);
+    }
+
     public void Released() 
     {
         _transformPoint.position = _newPosition;
@@ -46,6 +58,5 @@ public class Point : NetworkBehaviour
     void Update()
     {
         Collected();
-        Debug.Log("Estamos con el mesh en: "+_meshRenderer.enabled);
     }
 }

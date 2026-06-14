@@ -46,7 +46,25 @@ public class Player : NetworkBehaviour
         moveDirection = ApplyGravity(moveDirection);
         MoveCharacter(moveDirection);
 
-        Debug.Log("El contador esta en: "+_quantityPress);
+       
+    }
+
+    public void SetCollectedPoint(bool state)
+    {
+        _collectionPoint = state;
+    }
+    public void SetScore(int value) 
+    {
+        _score.Value = value;
+    }
+    public Point GetGatheredPoint()
+    {
+        return _gatheredPoint;
+    }
+
+    public bool GetCollectionPoint() 
+    {
+        return _collectionPoint;
     }
 
     private Vector3 GetCameraRelativeDirection()
@@ -134,8 +152,6 @@ public class Player : NetworkBehaviour
             _currentPoint = _point;
             _itemInRange = true;
         }
-
-
     }
 
     private void OnTriggerExit(Collider other)
