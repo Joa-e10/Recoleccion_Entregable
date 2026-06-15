@@ -152,4 +152,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Point
   ShowTopMostFoldoutHeaderGroup: 1
-  _meshRenderer: {fileID: 4714245187725386215}
+  _pointData: {fileID: 11400000, guid: 1c30a3cedfaa74f49814a21d8d26599e, type: 2}

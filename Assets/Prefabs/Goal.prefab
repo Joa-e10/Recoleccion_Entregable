@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4273399214388246469}
   - component: {fileID: 4224222388386423955}
   - component: {fileID: 7660008077634971408}
-  - component: {fileID: 4476196644971758300}
+  - component: {fileID: 7421608859957336757}
   m_Layer: 0
   m_Name: Goal
   m_TagString: Untagged
@@ -113,7 +113,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5.651493, y: 0.6389585, z: 5.3497868}
   m_Center: {x: 0.20745659, y: -0.18447852, z: -0.027142525}
---- !u!114 &4476196644971758300
+--- !u!114 &7421608859957336757
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

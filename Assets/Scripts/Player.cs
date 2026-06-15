@@ -9,14 +9,15 @@ public class Player : NetworkBehaviour
 {
 
     private CharacterController _characterController;
-    [SerializeField]private PlayerInput _playerInput;
-   [SerializeField]private GameObject _cam;
+    [SerializeField] private PlayerInput _playerInput;
+    [SerializeField] private GameObject _cam;
     private Point _currentPoint;
-    private Point _gatheredPoint;
-    private int _quantityPress;
+    private PointData _currentPointData;
     private bool _itemInRange;
-    private bool _collectionPoint;
-    private NetworkVariable<int> _score = new NetworkVariable<int>(0);
+    private NetworkVariable<int> _score = new NetworkVariable<int>(0,
+    NetworkVariableReadPermission.Everyone,
+    NetworkVariableWritePermission.Owner);
+    private bool _collectedPoint;
 
     //CAMARA Y MOVIMIENTO DEL CHARACTER CONTROLLER
     private Vector2 _input;
@@ -46,25 +47,13 @@ public class Player : NetworkBehaviour
         moveDirection = ApplyGravity(moveDirection);
         MoveCharacter(moveDirection);
 
-       
+
     }
 
-    public void SetCollectedPoint(bool state)
-    {
-        _collectionPoint = state;
-    }
-    public void SetScore(int value) 
+
+    public void SetScore(int value)
     {
         _score.Value = value;
-    }
-    public Point GetGatheredPoint()
-    {
-        return _gatheredPoint;
-    }
-
-    public bool GetCollectionPoint() 
-    {
-        return _collectionPoint;
     }
 
     private Vector3 GetCameraRelativeDirection()
@@ -114,34 +103,49 @@ public class Player : NetworkBehaviour
         _input = value.Get<Vector2>();
     }
 
-    private void OnPickUp(InputValue value) 
+    private void OnPickUp(InputValue value)
     {
-        if (value.isPressed && _itemInRange)
+        if (value.isPressed)
         {
-            _quantityPress++;
-            _collectionPoint = true;
-            _currentPoint.SetIsCollected(_collectionPoint);
-            _gatheredPoint = _currentPoint;
-             Debug.Log("Esta en rango y lo recolecto");
-        }
-        if (_quantityPress == 1 && _collectionPoint == true)
-        {
-            if (_gatheredPoint != null)
+            if (!_collectedPoint && _itemInRange)
             {
-                _collectionPoint = false;
-                _gatheredPoint.SetIsReleased(transform.position);
-                _gatheredPoint.SetIsCollected(_collectionPoint);
-                _gatheredPoint.Released();
-                _gatheredPoint = null;
-
+                _currentPointData = _currentPoint.GetPointData();
+                pickUpServerRpc();
+                _collectedPoint = true;
             }
         }
-        else 
-        {
-            _quantityPress = 0;
-        }
-            _quantityPress++;
     }
+
+    [ServerRpc]
+    private void pickUpServerRpc() 
+    {
+        Debug.Log("El currentPoint: "+_currentPoint);
+
+        if (_currentPoint != null)
+        {
+            _currentPoint.PointDespawn();
+        }
+        else
+        {
+            Debug.Log("El currentPoint para el server es null");
+        }
+    }
+
+    public bool GetCollectPoint() 
+    {
+    return _collectedPoint;
+    }
+    public void SetCollectPoint(bool newState)
+    {
+       _collectedPoint = newState;
+    }
+
+
+    public PointData GetCollectPointData()
+    {
+        return _currentPointData;
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
