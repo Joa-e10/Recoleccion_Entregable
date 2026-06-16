@@ -1,9 +1,12 @@
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class ServerManager : MonoBehaviour
 {
+    private GameObject _client;
+    private string colors;
     [SerializeField] private GameObject _pointPrefab;
     public void InstantiateObject()
     {

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1662568352635188085}
   - component: {fileID: 5951113227416016306}
   - component: {fileID: 3520390594810283565}
+  - component: {fileID: 5199672323123455895}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -121,3 +122,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ServerManager
   _pointPrefab: {fileID: 4598096235802719628, guid: 07af8916f1d1f7a43bd98a2d9e75dd58, type: 3}
+--- !u!114 &5199672323123455895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8724729468258507856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 440ce12b2067f6a44988c5c22fe385dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConnectionHandler
