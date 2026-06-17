@@ -1,5 +1,6 @@
 using System.Globalization;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,12 +20,23 @@ public class Player : NetworkBehaviour
     NetworkVariableWritePermission.Owner);
     private bool _collectedPoint;
 
+    //NETWORK TRANSFORM
+    [SerializeField]private Transform _transformSpawnHost;
+    [SerializeField]private Transform _transformSpawnClient;
+
+    private Transform _transform;
+    private NetworkTransform _transformN;
+
     //CAMARA Y MOVIMIENTO DEL CHARACTER CONTROLLER
     private Vector2 _input;
     private float _speed = 5f;
     private float _yVelocity;
     private float _gravity = -9.81f;
 
+    private void Awake()
+    {
+        
+    }
     private void Start()
     {
         _characterController = GetComponent<CharacterController>();
@@ -36,7 +48,45 @@ public class Player : NetworkBehaviour
     {
         _playerInput.enabled = IsOwner;
         _cam.SetActive(IsOwner);
+        _transformN = GetComponent<NetworkTransform>();
+        _transform = GetComponent<Transform>();
     }
+
+    private void OnEnable()
+    {
+        CanvasManager.OnSceneLoad += NetTransformDisable;
+    }
+    private void OnDisable()
+    {
+        CanvasManager.OnSceneLoad -= NetTransformDisable;
+    }
+    public void NetTransformDisable()
+    {
+        if (IsServer)
+        {
+            Debug.Log("Entro el papu host");
+            foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+            {
+
+                Debug.Log("Se instancias para sus spawns");
+                if (client.ClientId == 0)
+                {
+                    var transformN = client.PlayerObject.GetComponent<NetworkTransform>();
+                    transformN.Teleport(_transformSpawnHost.position, Quaternion.identity, transform.localScale);
+
+                }
+                else
+                {
+                    var transformN = client.PlayerObject.GetComponent<NetworkTransform>();
+                    transformN.Teleport(_transformSpawnClient.position, Quaternion.identity, transform.localScale);
+
+                }
+            }
+
+        }
+            
+    }
+
     private void Update()
     {
         if (!IsOwner) return;
@@ -46,8 +96,11 @@ public class Player : NetworkBehaviour
         RotateCharacter(moveDirection);
         moveDirection = ApplyGravity(moveDirection);
         MoveCharacter(moveDirection);
-
-
+        if (Keyboard.current.qKey.wasPressedThisFrame)
+        {
+            Debug.Log("Esta tocando la q");
+        }
+        
     }
 
 
@@ -131,7 +184,7 @@ public class Player : NetworkBehaviour
         }
     }
 
-    public bool GetCollectPoint() 
+    public bool GetCollectPoint()
     {
     return _collectedPoint;
     }

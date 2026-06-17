@@ -1,35 +1,39 @@
-using NUnit.Framework;
+using System;
 using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class CanvasManager : MonoBehaviour
+
+public class CanvasManager : NetworkBehaviour
 {
-    [SerializeField]private GameObject _panelMainMenu;
-    [SerializeField]private GameObject _panelSetIp;
+    [Header("Paneles UI")]
+    [SerializeField] private GameObject _panelMainMenu;
+    [SerializeField] private GameObject _panelSetIp;
     [SerializeField] private GameObject _waitingPanel;
-    [SerializeField]private Button _startHostButton;
+
+    [Header("Botones")]
+    [SerializeField] private Button _startHostButton;
     [SerializeField] private Button _startClientButton;
-    [SerializeField]private Button _JoinButton;
+    [SerializeField] private Button _JoinButton;
     [SerializeField] private Button _BackButton;
     [SerializeField] private Button _startGameButton;
-    [SerializeField]private TMP_InputField _clientInputField;
+
+    [Header("Texto/Input")]
+    [SerializeField] private TMP_InputField _clientInputField;
     [SerializeField] private TextMeshProUGUI _waitingText;
 
-    private ulong _clientID;
-    private bool _isClientReady;
-    private bool _isHostReady;
-    private int _quantityClients = 0;
-    private NetworkObject _client;
-    private ulong _hostClientId;
-    private string _newText;
+    private bool _gameStarted = false; // Freno para que StartGame ocurra una sola vez
+
+    private NetworkVariable<int> _quantityClients = new NetworkVariable<int>(0,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+
+    public static event Action OnSceneLoad;
 
     private void OnEnable()
     {
-        // Las suscripciones a componentes de la misma escena (UI) están perfectas aquí
         _startHostButton.onClick.AddListener(StartHost);
         _startClientButton.onClick.AddListener(showPanelIp);
         _JoinButton.onClick.AddListener(StartClient);
@@ -39,9 +43,6 @@ public class CanvasManager : MonoBehaviour
 
     void Start()
     {
-        // Movemos la suscripción del NetworkManager aquí.
-        // Para este punto, todos los Awake() del juego ya corrieron,
-        // garantizando que el Singleton ya está listo.
         if (NetworkManager.Singleton != null)
         {
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
@@ -54,102 +55,93 @@ public class CanvasManager : MonoBehaviour
 
     private void OnDisable()
     {
-        // Removemos listeners de botones de forma segura
-        if (_startHostButton != null) _startHostButton.onClick.RemoveListener(StartHost);
-        if (_startClientButton != null) _startClientButton.onClick.RemoveListener(showPanelIp);
-        if (_JoinButton != null) _JoinButton.onClick.RemoveListener(StartClient);
-        if (_BackButton != null) _BackButton.onClick.RemoveListener(HidePanelIp);
-        if (_startGameButton != null) _startGameButton.onClick.RemoveListener(StartGame);
+        _startHostButton.onClick.RemoveListener(StartHost);
+        _startClientButton.onClick.RemoveListener(showPanelIp);
+        _JoinButton.onClick.RemoveListener(StartClient);
+        _BackButton.onClick.RemoveListener(HidePanelIp);
+        _startGameButton.onClick.RemoveListener(StartGame);
 
-        // Desuscripción segura del Singleton de red
         if (NetworkManager.Singleton != null)
         {
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
         }
     }
+
     public void OnClientConnected(ulong clientId)
     {
-        
-        if (NetworkManager.Singleton == null)
-            Debug.Log("NetworkManager es NULL");
-
-        if (_waitingText == null)
-            Debug.Log("_waitingText es NULL");
-
-        if (_startGameButton == null)
-            Debug.Log("_startGameButton es NULL");
+        if (!IsServer) return;
 
         Debug.Log("Se conecto el jugador nro: " + clientId);
-        
 
-        if (_isHostReady)
+        _quantityClients.Value++;
+
+        if (clientId == 0)
         {
-            _quantityClients++;
             Debug.Log("Entro el host de la sesion");
-            _newText = "Waiting for players";
-            _waitingText.text = _newText;
+            _waitingText.text = "Waiting for players...";
         }
-
-        if (_isClientReady)
+        else
         {
-            _quantityClients++;
             Debug.Log("Entro el client en la sesion");
-            _newText = "Loading game...";
-            _waitingText.text = _newText;
+            _waitingText.text = "Loading game...";
         }
 
-        if (_quantityClients >= 2)
+        
+        if (_quantityClients.Value >= 2)// Si alcanzamos la cantidad de jugadores, el servidor inicia automáticamente
         {
-            Debug.Log("Entro en la activacion del boton start");
-            _newText = "Ready to start the game";
-            _startGameButton.enabled = true;
+            Debug.Log("iniciara la partida");
+            StartGame();
         }
-        Debug.Log($"Hay {_quantityClients} en partida");
     }
 
     public void showPanelIp()
-    {
+    { 
         _panelSetIp.SetActive(true);
     }
-
     public void HidePanelIp()
     {
-        _panelSetIp.SetActive(false);
+     _panelSetIp.SetActive(false);
     }
+
     public void StartHost()
     {
-        _isHostReady = true;
         NetworkManager.Singleton.StartHost();
         _waitingPanel.SetActive(true);
-
     }
 
     public void StartClient()
     {
         if (_clientInputField != null)
         {
-            _isClientReady = true;
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(_clientInputField.text, (ushort)7777); //Consultar con la IA y probar si se conectan dos
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(_clientInputField.text, (ushort)7777);
             NetworkManager.Singleton.StartClient();
             _waitingPanel.SetActive(true);
-
         }
     }
 
     public void StartGame()
     {
+  
+        if (_gameStarted) return;
+        _gameStarted = true;
 
-        NetworkManager.Singleton.SceneManager.LoadScene(
-        "SampleScene",
-         LoadSceneMode.Single);
+
+        RefreshSceneClientRpc();
+
+        OnSceneLoad?.Invoke();
+
+
     }
 
-    private void Update()
+    [ClientRpc]
+    public void RefreshSceneClientRpc()
     {
-        if (_quantityClients >= 2)
-        {
-            StartGame();
-            
-        }
+        Debug.Log("[NETCODE] Orden recibida del servidor: Apagando todos los paneles.");
+
+
+            _panelMainMenu.SetActive(false);
+            _panelSetIp.SetActive(false); 
+            _waitingPanel.SetActive(false);
     }
 }
+

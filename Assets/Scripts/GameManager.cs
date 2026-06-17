@@ -1,12 +1,15 @@
 using Unity.Netcode;
 using Unity.VisualScripting;
+using UnityEditor.Build.Content;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ServerManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     private GameObject _client;
     private string colors;
+    private float _timer;
     [SerializeField] private GameObject _pointPrefab;
     public void InstantiateObject()
     {
@@ -16,8 +19,26 @@ public class ServerManager : MonoBehaviour
         Debug.Log("Spawnearon objetos en escena");
     }
 
+    private void OnEnable()
+    {
+        //CanvasManager.OnSceneLoad += StartTimer;
+    }
+    private void OnDisable()
+    {
+        
+    }
+
+    public void StartTimer() 
+    {
+        /*if (state == true) 
+        {
+            _timer += Time.deltaTime;
+        }*/
+    }
+
     void Update()
     {
+      
         if (Keyboard.current.hKey.wasPressedThisFrame)
         {
             NetworkManager.Singleton.StartHost(); //Iniciamos el Host
@@ -28,5 +49,6 @@ public class ServerManager : MonoBehaviour
             NetworkManager.Singleton.StartClient(); //Iniciamos como client
 
         }
+
     }
 }

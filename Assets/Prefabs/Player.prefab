@@ -563,7 +563,8 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   _playerInput: {fileID: 2962318616841799399}
   _cam: {fileID: 912261344145414826}
-  _currentPoint: {fileID: 0}
+  _transformSpawnHost: {fileID: 3880212492548638980, guid: 50484372ff01cae4aa3911b6218849c6, type: 3}
+  _transformSpawnClient: {fileID: 5004655030763672370, guid: cbb30d17bbb3da34db82dfbcff8af023, type: 3}
 --- !u!114 &4856312008202184653
 MonoBehaviour:
   m_ObjectHideFlags: 0
