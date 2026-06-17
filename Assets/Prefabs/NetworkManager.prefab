@@ -122,6 +122,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ServerManager
   _pointPrefab: {fileID: 4598096235802719628, guid: 07af8916f1d1f7a43bd98a2d9e75dd58, type: 3}
+  _panelGameUi: {fileID: 0}
+  _timeValue: {fileID: 0}
+  _timerObject: {fileID: 6934854155727384558, guid: 820abb2531ee6bf40b8467435d5570e8, type: 3}
 --- !u!114 &5199672323123455895
 MonoBehaviour:
   m_ObjectHideFlags: 0

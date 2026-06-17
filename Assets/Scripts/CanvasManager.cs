@@ -26,9 +26,7 @@ public class CanvasManager : NetworkBehaviour
 
     private bool _gameStarted = false; // Freno para que StartGame ocurra una sola vez
 
-    private NetworkVariable<int> _quantityClients = new NetworkVariable<int>(0,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server);
+    private int _quantityClients = 0;
 
     public static event Action OnSceneLoad;
 
@@ -73,21 +71,21 @@ public class CanvasManager : NetworkBehaviour
 
         Debug.Log("Se conecto el jugador nro: " + clientId);
 
-        _quantityClients.Value++;
-
         if (clientId == 0)
         {
+            _quantityClients++;
             Debug.Log("Entro el host de la sesion");
             _waitingText.text = "Waiting for players...";
         }
         else
         {
+            _quantityClients++;
             Debug.Log("Entro el client en la sesion");
             _waitingText.text = "Loading game...";
         }
 
         
-        if (_quantityClients.Value >= 2)// Si alcanzamos la cantidad de jugadores, el servidor inicia automáticamente
+        if (_quantityClients >= 2)// Si alcanzamos la cantidad de jugadores, el servidor inicia automáticamente
         {
             Debug.Log("iniciara la partida");
             StartGame();
@@ -128,8 +126,6 @@ public class CanvasManager : NetworkBehaviour
 
         RefreshSceneClientRpc();
 
-        OnSceneLoad?.Invoke();
-
 
     }
 
@@ -142,6 +138,7 @@ public class CanvasManager : NetworkBehaviour
             _panelMainMenu.SetActive(false);
             _panelSetIp.SetActive(false); 
             _waitingPanel.SetActive(false);
+        OnSceneLoad?.Invoke();
     }
 }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using Unity.Netcode;
 using Unity.Netcode.Components;
@@ -20,12 +21,11 @@ public class Player : NetworkBehaviour
     NetworkVariableWritePermission.Owner);
     private bool _collectedPoint;
 
+    private float _timer;
+
     //NETWORK TRANSFORM
     [SerializeField]private Transform _transformSpawnHost;
     [SerializeField]private Transform _transformSpawnClient;
-
-    private Transform _transform;
-    private NetworkTransform _transformN;
 
     //CAMARA Y MOVIMIENTO DEL CHARACTER CONTROLLER
     private Vector2 _input;
@@ -39,6 +39,7 @@ public class Player : NetworkBehaviour
     }
     private void Start()
     {
+
         _characterController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -48,8 +49,6 @@ public class Player : NetworkBehaviour
     {
         _playerInput.enabled = IsOwner;
         _cam.SetActive(IsOwner);
-        _transformN = GetComponent<NetworkTransform>();
-        _transform = GetComponent<Transform>();
     }
 
     private void OnEnable()
@@ -84,7 +83,6 @@ public class Player : NetworkBehaviour
             }
 
         }
-            
     }
 
     private void Update()
