@@ -23,6 +23,9 @@ public class CanvasManager : NetworkBehaviour
     [Header("Texto/Input")]
     [SerializeField] private TMP_InputField _clientInputField;
     [SerializeField] private TextMeshProUGUI _waitingText;
+    public TextMeshProUGUI _scoreHost;
+    public TextMeshProUGUI _scoreClient;
+
 
     private bool _gameStarted = false; // Freno para que StartGame ocurra una sola vez
 
@@ -47,7 +50,7 @@ public class CanvasManager : NetworkBehaviour
         }
         else
         {
-            Debug.LogError("¡No se encontró un NetworkManager en la escena!");
+            Debug.LogError("No hay NetworkManager aun");
         }
     }
 
@@ -135,9 +138,9 @@ public class CanvasManager : NetworkBehaviour
         Debug.Log("[NETCODE] Orden recibida del servidor: Apagando todos los paneles.");
 
 
-            _panelMainMenu.SetActive(false);
-            _panelSetIp.SetActive(false); 
-            _waitingPanel.SetActive(false);
+        _panelMainMenu.SetActive(false);
+        _panelSetIp.SetActive(false); 
+        _waitingPanel.SetActive(false);
         OnSceneLoad?.Invoke();
     }
 }

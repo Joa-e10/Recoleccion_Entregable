@@ -120,11 +120,28 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c9b745ebe303b543b90efda9edfe4c6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ServerManager
-  _pointPrefab: {fileID: 4598096235802719628, guid: 07af8916f1d1f7a43bd98a2d9e75dd58, type: 3}
-  _panelGameUi: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  _spawn1: {fileID: 0}
+  _spawn2: {fileID: 0}
+  _spawn3: {fileID: 0}
+  _spawn4: {fileID: 0}
+  _spawn5: {fileID: 0}
+  _listPoints:
+  - {fileID: 4598096235802719628, guid: 07af8916f1d1f7a43bd98a2d9e75dd58, type: 3}
+  - {fileID: 4598096235802719628, guid: 07af8916f1d1f7a43bd98a2d9e75dd58, type: 3}
+  - {fileID: 4598096235802719628, guid: 07af8916f1d1f7a43bd98a2d9e75dd58, type: 3}
+  - {fileID: 4598096235802719628, guid: 07af8916f1d1f7a43bd98a2d9e75dd58, type: 3}
+  - {fileID: 4598096235802719628, guid: 07af8916f1d1f7a43bd98a2d9e75dd58, type: 3}
+  _listSpawn:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _pointPrefab: {fileID: 0}
+  _panelGameUi: {fileID: 8989887487926040372, guid: 81bcc08e5d4f9c644ba9f591f5b951a3, type: 3}
   _timeValue: {fileID: 0}
-  _timerObject: {fileID: 6934854155727384558, guid: 820abb2531ee6bf40b8467435d5570e8, type: 3}
+  _timerObject: {fileID: 0}
 --- !u!114 &5199672323123455895
 MonoBehaviour:
   m_ObjectHideFlags: 0

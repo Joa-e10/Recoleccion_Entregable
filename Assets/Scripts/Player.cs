@@ -19,9 +19,8 @@ public class Player : NetworkBehaviour
     private NetworkVariable<int> _score = new NetworkVariable<int>(0,
     NetworkVariableReadPermission.Everyone,
     NetworkVariableWritePermission.Owner);
-    private bool _collectedPoint;
+    private bool _collectedPoint = false;
 
-    private float _timer;
 
     //NETWORK TRANSFORM
     [SerializeField]private Transform _transformSpawnHost;
@@ -158,7 +157,7 @@ public class Player : NetworkBehaviour
     {
         if (value.isPressed)
         {
-            if (!_collectedPoint && _itemInRange)
+            if (_collectedPoint == false && _itemInRange == true)
             {
                 _currentPointData = _currentPoint.GetPointData();
                 pickUpServerRpc();
@@ -168,7 +167,7 @@ public class Player : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void pickUpServerRpc() 
+    private void pickUpServerRpc()
     {
         Debug.Log("El currentPoint: "+_currentPoint);
 

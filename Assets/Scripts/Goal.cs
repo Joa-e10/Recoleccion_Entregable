@@ -6,7 +6,7 @@ public class Goal : MonoBehaviour
     private bool _collectionPoint;
     private PointData _pointCollected;
     private Player _player;
-
+   [SerializeField] private GameManager _gameManager;
 
     void Start()
     {
@@ -46,7 +46,7 @@ public class Goal : MonoBehaviour
 
     public void addScore() 
     {
-        if (_player.IsOwner) 
+        if (_player.IsOwner)
         {
             if (_collectionPoint == true)
             {
@@ -54,18 +54,11 @@ public class Goal : MonoBehaviour
                 _pointsAdded = _pointsAdded + _pointCollected._pointValue;
                 _player.SetCollectPoint(false);
                 _player.SetScore(_pointsAdded);
+                _gameManager.setScoreShow(_pointsAdded);
             }
         }
         
     }
 
-    [ServerRpc]
-    private void updateScoreServerRpc() 
-    {
-        _player.SetScore(_pointsAdded);
-    }
 
-    void Update()
-    {
-    }
 }
